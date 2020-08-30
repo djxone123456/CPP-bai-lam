@@ -1,61 +1,67 @@
 #include <bits/stdc++.h>
 
-#define fi first
-#define se second
-#define MP make_pair
 #define pb push_back
-#define INF 999999999999999
-#define PI 3.1415926535897932384626433832795
-#define MOD 1000000007
+#define mp make_pair
 #define endl '\n'
-#define getBit(A, bit) ((A & 1 << bit) != 0)
-#define turnOn(A, bit) (A |= 1 << bit)
-#define turnOff(A, bit) (A &= ~(1 << bit))
+#define INF INT_MAX
+#define MOD 1000000007
+#define pie "TD"
 
 using namespace std;
 
 typedef long long ll;
-typedef pair <ll, ll> pi;
-typedef unsigned long long ull;
+typedef pair<ll, ll> pi;
 
-ll dd[20001];
-ll dg[20001], n;
-vector<pi> G[20001];
+vector<pi> G[10000];
+vector<ll> song[10000];
 
-void dijsktra(ll st)
+ll n,k,dd[10000], cc[10000];
+
+void dijsktra(int st)
 {
-    priority_queue<pi, vector<pi> , greater<pi>> pq;
+    priority_queue<pi, vector<pi>, greater<pi>> pq;
 
-    for(ll i = 0;i<=n;i++)
-        {
-            dd[i] = INF;
-            dg[i] = 0;
-        }
-
+    for(int i = 1;i<=n;i++)
+    {
+        dd[i] = INF;
+        cc[i] = 0;
+    }
     dd[st] = 0;
-    pq.push(pi(0LL, st));
+
+    pq.push(pi(0, st)); //weight - u
 
     while(!pq.empty())
     {
-        ll u = pq.top().se;
-        ll du = pq.top().fi;
+        int u = pq.top().second;
+        int du = pq.top().first;
         pq.pop();
 
-        if(dd[u] != du) continue;
+        if(du != dd[u]) continue;
 
-        for(pi t : G[u])
+        int ok = 0;
+        for(pi lay : G[u])
         {
-            ll v = t.se;
-            ll uv = t.fi;
-            ll cnt = 0;
-
-            if(uv == MOD) cnt = 1; // Bo may thich the
+            ok = 1;
+            int v = lay.second;
+            int uv = lay.first;
 
             if(dd[v] > du + uv)
+                {
+                    dd[v] = du + uv;
+                    pq.push(pi(dd[v], v));
+                }
+        }
+
+        if(!ok)
+        {
+            for(int v : song[u])
             {
-                dd[v] = du + uv;
-                dg[v] = dg[u] + cnt;
-                pq.push(pi(dd[v], v));
+                if(dd[v] > du)
+                    {
+                        dd[v] = du;
+                        pq.push(pi(dd[v], v));
+                        cc[v]++;
+                    }
             }
         }
     }
@@ -63,38 +69,33 @@ void dijsktra(ll st)
 
 int main()
 {
-    ios_base::sync_with_stdio(0);
-    cin.tie(0); cout.tie(0);
-
-    freopen("td.inp","r",stdin);
-    freopen("td.out","w",stdout);
-
-    ll k;
+    freopen(pie".inp", "r",stdin);
+    freopen(pie".out", "w",stdout);
 
     cin>>n>>k;
 
     for(ll i = 1;i<=k;i++)
     {
-        ll x,y;
+        ll x, y;
         cin>>x>>y;
 
-        G[x].pb(pi(MOD, y));
-        G[y].pb(pi(MOD, x));
+        song[x].pb(y);
+        song[y].pb(x);
     }
 
-    ll x,y,dai;
-    while(cin>>x>>y>>dai)
+    ll x;
+    while(cin>>x)
     {
-        G[x].pb(pi(dai, y));
-        G[y].pb(pi(dai, x));
+        ll y,z;
+        cin>>y>>z;
+
+        G[x].pb(pi(z, y));
+        G[y].pb(pi(z, x));
     }
 
     dijsktra(1);
 
-    if(dd[n] - MOD * dg[n] == INF)
-        cout<<-1;
-    else
-      cout<<dd[n] - MOD * dg[n]<<endl<<dg[n];
+    cout<<dd[n]<<endl<<cc[n];
 
     return 0;
 }

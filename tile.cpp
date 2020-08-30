@@ -1,29 +1,32 @@
+//Dai Ca Di Hoc
 #include <bits/stdc++.h>
-
-#define MP make_pair
+#define sz(x) int(x.size())
+#define reset(x) memset(x, 0,sizeof(x))
+#define Rep(i,n) for(int (i)=0;(i)<(int)(n);++(i))
+#define For(i,l,u) for(int (i)=(int)(l);(i)<=(int)(u);++(i))
+#define MIN(x,y) if (x > (y)) x = (y)
+#define MAX(x,y) if (x < (y)) x = (y)
 #define PB push_back
-#define INF INT_MAX
-#define PI 3.1415926535897932384626433832795
-#define MOD 1000000007
+#define mp make_pair
+#define F first
+#define S second
 #define maxn 3
+#define MOD 1000000007
+#define remain(x) if (x > MOD) x -= MOD
+#define pii pair<int, int>
+#define Task "tile"
 
 using namespace std;
 
-typedef pair <int, int> pi;
 typedef long long ll;
-typedef unsigned long long ull;
+typedef long double ld;
 
-struct matrix
-{
+struct matrix{
     int val[maxn][maxn];
-
-    matrix ()
-    {
+    matrix (){
         memset(val, 0, sizeof(val));
     }
-
-    matrix operator * (const matrix &B)
-    {
+    matrix operator * (const matrix &B){
         matrix C;
         for (int i = 1; i <= 2; i++)
             for (int j = 1; j <= 2; j++)
@@ -34,17 +37,12 @@ struct matrix
         return C;
     }
 
-    matrix power(ll x)
-    {
+    matrix POWW(ll x){
         matrix C;
-
-        for (int i = 1; i <= 2; i++)
-            C.val[i][i] = 1;
-
+        for (int i = 1; i <= 2; i++) C.val[i][i] = 1;
         if (x == 0) return C;
-        matrix B = power(x/2);
+        matrix B = POWW(x/2);
         C = B*B;
-
         if (x % 2 == 1) C = C * (*this);
         return C;
     }
@@ -52,52 +50,21 @@ struct matrix
 
 int main()
 {
-    ios_base::sync_with_stdio(0);
-    cin.tie(0); cout.tie(0);
-
-    #ifdef djxone123456
-    freopen("debug.inp","r",stdin);
-    freopen("debug.out","w",stdout);
-    #endif
-
-    freopen("tile.inp","r",stdin);
-    freopen("tile.out","w",stdout);
-
-    int q;
-
-    cin>>q;
-
-    while(q--)
-    {
-        ll n;
-        cin>>n;
-
+	ios_base::sync_with_stdio(0); cin.tie(); cout.tie();
+    freopen(Task".inp", "r", stdin);
+    //freopen(Task".out", "w", stdout);
+    int ntest;
+    ll n;
+    cin >> ntest;
+    while (ntest--){
+        cin >> n;
         matrix T;
-
         T.val[1][1] = 1;
         T.val[1][2] = 2;
         T.val[2][1] = 1;
-
-        matrix B = T.power(n);
-
-        cout<<B.val[1][1]<<'\n';
+        matrix B = T.POWW(n);
+        cout << B.val[1][1] << "\n";
     }
     return 0;
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 

@@ -1,106 +1,79 @@
-#include <bits/stdc++.h>
 
-#define MP make_pair
+//Dai Ca Di Hoc
+#include <bits/stdc++.h>
+#define sz(x) int(x.size())
+#define reset(x) memset(x, 0,sizeof(x))
+#define MIN(x,y) if (x > (y)) x = (y)
+#define MAX(x,y) if (x < (y)) x = (y)
 #define PB push_back
-#define INF int_MAX
-#define PI 3.1415926535897932384626433832795
+#define mp make_pair
+#define F first
+#define S second
+#define Task "subxor"
+#define maxn 100005
 #define MOD 1000000007
-#define endl '\n'
-#define getB(A, bit) ((A & (1 << bit)) != 0)
+#define remain(x) if (x > MOD) x -= MOD
+#define pii pair<int, int>
+#define bit(x, i) (((x) >> (i)) & 1)
+
+
 
 using namespace std;
 
-typedef long long ll;
-typedef pair <int, int> pi;
-typedef unsigned long long ull;
+template <typename T> inline void read(T &x){char c;bool nega=0;while((!isdigit(c=getchar()))&&(c!='-'));if(c=='-'){nega=1;c=getchar();}x=c-48;while(isdigit(c=getchar())) x=x*10+c-48;if(nega) x=-x;}
+template <typename T> inline void writep(T x){if(x>9) writep(x/10);putchar(x%10+48);}
+template <typename T> inline void write(T x){if(x<0){putchar('-');x=-x;}writep(x);putchar(' ');}
+template <typename T> inline void writeln(T x){write(x);putchar('\n');}
 
-int child[3000000][2] = {}, n,sum[3000000] = {}, k, cnt = 0;
-ll res = 0;
 
-void solve(int s)
-{
+int Next[3000000][2];
+int val[3000000], sl[3000000];
+int a[maxn];
+int n, k, cnt = 0;
+long long res = 0;
+void Add(int x){
     int node = 0;
-
-    for(int i = 30;i>=0;i--)
+    for (short i = 30; i >= 0; i--)
     {
-        int curr_s = getB(s, i);
-        int curr_k = getB(k, i);
-
-        if(curr_k) res += sum[ child[node][curr_s] ];
-
-        int xorr = curr_k ^ curr_s;
-
-        if(child[node][xorr] == 0) break;
-
-        node = child[node][xorr];
+        short ch = bit(x,i);
+        if (Next[node][ch] == 0) Next[node][ch] = ++ cnt;
+        node = Next[node][ch];
+        sl[node] ++;
     }
+    val[node] = x;
 }
 
-void add(int s)
-{
+void Calc(int x){
     int node = 0;
-
-    for(int i = 30;i>=0;i--)
+    for (short i = 30; i >= 0; i--)
     {
-        int x = getB(s, i);
-
-        if(child[node][x] == 0) child[node][x] = ++cnt;
-
-        sum[ child[node][x] ]++;
-
-        node = child[node][x];
+        short curbit = bit(x,i);
+        short dest = bit(k,i);
+        if (dest) res += sl[Next[node][curbit]];
+        short mov = dest ^ curbit;
+        if (!Next[node][mov]) break;
+        node = Next[node][mov];
     }
 }
 
 int main()
 {
-    ios_base::sync_with_stdio(0);
-    cin.tie(0); cout.tie(0);
-
-    #ifdef djxone123456
-    freopen("debug.inp","r",stdin);
-    freopen("debug.out","w",stdout);
-    #endif
-
-    freopen("subxor.inp","r",stdin);
-    freopen("subxor.out","w",stdout);
-
-    cin>>n>>k;
-
-    int prev = 0;
-
-    add(0);
-
-    for(int i = 1;i<=n;i++)
-    {
-        int now;
-
-        cin>>now;
-
-        prev ^= now;
-
-        solve(prev);
-        add(prev);
-    }
-
-    cout<<res;
-
+	//ios_base::sync_with_stdio(0);
+    freopen(Task".inp", "r", stdin);
+    freopen(Task".out", "w", stdout);
+    read(n);
+    read(k);
+    Add(0);
+	for (int i = 1; i <= n; i++)
+	{
+		read(a[i]);
+		a[i] ^= a[i-1];
+        Calc(a[i]);
+        Add(a[i]);
+	}
+	cout << res;
+	//cerr << res;
     return 0;
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 

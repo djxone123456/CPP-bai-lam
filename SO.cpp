@@ -62,7 +62,7 @@ int main()
 
     memset(f, 255, sizeof(f));
 
-    cout<<trau(1, k, 0, 0) + (k == 1);
+    cout<<trau(1, k, 0, 0) + 1;
 
     return 0;
 }
