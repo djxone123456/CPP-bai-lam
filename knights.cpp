@@ -1,117 +1,76 @@
-//Dai Ca Di Hoc
 #include <bits/stdc++.h>
-#define sz(x) int(x.size())
-#define MIN(x,y) if (x < y) x = y
+
+#define MP make_pair
 #define PB push_back
-#define mp make_pair
-#define F first
-#define S second
-#define Task "knights"
-#define maxn 82
+#define INF INT_MAX
+#define PI 3.1415926535897932384626433832795
 #define MOD 1000000009
-#define remain(x) if (x > MOD) x -= MOD
-#define pii pair<int, int>
-#define ll long long
-#define bit(x,i) ((x >> i) & 1)
+#define getBit(A, bit) (A & (1 << bit) != 0)
+#define turnOn(A, bit) (A |= (1 << bit))
+#define turnOff(A, bit) (A &= ~(1 << bit))
 
 using namespace std;
 
-const long long M2 = 8ll * MOD * MOD;
+typedef pair <int, int> pi;
+typedef long long ll;
+typedef unsigned long long ull;
 
+int m,n, f[39062][1 << 4][1 << 4];
 
-int m;
-long long n;
-int sl = 0, state[100];
-long long f[100][100];
-
-
-struct matrix
+int trau(int pos, int prev1, int prev2)
 {
-    long long val[maxn][maxn];
-    matrix()
+    if(pos > n) return 1;
+
+    int &res = f[pos][prev1][prev2];
+    if(res != -1) return res;
+
+    res = 0;
+
+    for(int rnow = 0;rnow < (1 << m);rnow++)
     {
-        memset(val, 0, sizeof(val));
+        if((rnow & (prev1 << 2)) || (prev1 & (rnow << 2))) continue;
+        if((rnow & (prev2 << 1)) || (prev2 & (rnow << 1))) continue;
+
+        res = (res + trau(pos + 1, rnow, prev1)) % MOD;
     }
-
-    matrix operator * ( const matrix & x)
-    {
-        matrix res;
-        for (int u = 0; u < sl; u++)            
-                for (int i = 0; i < sl; i++)
-					for (int v = 0; v < sl; v++){
-						res.val[u][v] += (val[u][i] * x.val[i][v] );
-						if (res.val[u][v] >= M2) res.val[u][v] -= M2;
-					}
-		for (int u = 0; u < sl; u++)            
-			for (int v = 0; v < sl; v++) res.val[u][v] %= MOD;
-        return res;
-    }
-	
-	matrix POWW(matrix A, long long b)
-{
-    matrix C;
-    for (int i = 0; i < sl; i++) C.val[i][i] = 1;
-    for ( ; b; b /= 2, A = A * A)
-        if (b % 2) C = C * A;
-    return C;
-}
-};
-
-matrix A;
-
-matrix POWW(matrix A, long long b)
-{
-    matrix C;
-    for (int i = 0; i < sl; i++) C.val[i][i] = 1;
-    for ( ; b; b /= 2, A = A * A)
-        if (b % 2) C = C * A;
-    return C;
-}
-
-bool check_state(int x)
-{
-    int a = x >> m;
-	int b = x & ((1<<m) - 1);
-	return !((a & (b>>2)) || (b & (a>>2)));	
-}
-
-bool khop(int x, int y)
-{
-    if ((x >> m) != (y&((1<<m) - 1))) return 0;
-	int a = x & ((1<<m) - 1);
-	int b = y >> m;    
-    return !((a & (b>>1)) || (b & (a>>1)));	
-}
-
-
-void Prepare()
-{
-    for (int i = 0; i < 1 << (2*m); i++)
-        if (check_state(i)) state[sl++] = i;
-    //cout << sl << endl;
-    for (int i = 0; i < sl; i++)
-        for (int j = 0; j < sl; j++)
-            A.val[i][j] = khop(state[i],state[j]);
+    return res;
 }
 
 int main()
 {
-	ios_base::sync_with_stdio(0);
-    freopen(Task".inp", "r", stdin);
-    freopen(Task".out", "w", stdout);
-    cin >> m >> n;
-    if (n == 1)
-    {
-        cout << (1 << m);
-        return 0;
-    }
-    Prepare();
+    ios_base::sync_with_stdio(0);
+    cin.tie(0); cout.tie(0);
 
-    matrix B = POWW(A,n-2);
-    long long ans = 0;
-    for (int i = 0; i < sl; i++)
-        for (int j = 0; j < sl; j++) ans += B.val[i][j];
-    cout << ans % MOD;
+    #ifdef djxone123456
+    freopen("debug.inp","r",stdin);
+    freopen("debug.out","w",stdout);
+    #endif
+
+    freopen("knights.inp","r",stdin);
+    freopen("knights.out","w",stdout);
+
+    cin>>m>>n;
+
+    memset(f, 255, sizeof(f));
+
+    cout<<trau(1, 0, 0);
+
+    return 0;
 }
 
-// 0 1 1 2 3 5 8
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
