@@ -9,15 +9,16 @@
 #define mp make_pair
 #define F first
 #define S second
-#define maxn 4
+#define maxn 110
 #define MOD 1000000007
 #define remain(x) if (x > MOD) x -= MOD
 #define pii pair<int, int>
-#define Task "fibos"
+#define Task "dream"
 
 using namespace std;
 
 typedef long long ll;
+typedef unsigned long long ull;
 typedef long double ld;
 
 struct matrix{
@@ -27,54 +28,68 @@ struct matrix{
     }
     matrix operator * (const matrix &B){
         matrix C;
-        for (int i = 1; i <= 3; i++)
-            for (int j = 1; j <= 3; j++)
+        for (int i = 1; i <= 101; i++)
+            for (int j = 1; j <= 101; j++)
             {
-                for (int k = 1; k <= 3; k++)
+                for (int k = 1; k <= 101; k++)
                     C.val[i][j] = (C.val[i][j] + (ll)val[i][k] * B.val[k][j]) % MOD;
             }
         return C;
     }
 
-    matrix POWW(ll x){
-        matrix C;
-        for (int i = 1; i <= 3; i++) C.val[i][i] = 1;
-        if (x == 0) return C;
-        matrix B = POWW(x/2);
-        C = B*B;
-        if (x % 2 == 1) C = C * (*this);
-        return C;
+    matrix POWW(ull x){
+        if(x == 1) return (*this);
+        if(x == 2) return (*this) * (*this);
+
+        matrix tmp = POWW(x / 2);
+
+        if(x & 1) return tmp * tmp * (*this);
+
+        return tmp * tmp;
     }
 };
 
+ull k;
+int dd[110], n;
+
 int main()
 {
-    ios_base::sync_with_stdio(0); cin.tie(); cout.tie();
+    ios_base::sync_with_stdio(0);
+    cin.tie(0); cout.tie();
+
     freopen(Task".inp", "r", stdin);
     freopen(Task".out", "w", stdout);
 
-    ll n;
-    cin >> n;
+    memset(dd, 0, sizeof(dd));
 
-    if(n == 1) return cout<<1, 0;
+    cin>> n >> k;
 
-    matrix T;
-    T.val[1][1] = 1;
-    T.val[1][2] = 1;
-    T.val[1][3] = 1;
-    T.val[2][2] = 1;
-    T.val[2][3] = 1;
-    T.val[3][2] = 1;
+    for(int i = 1;i<=n;i++)
+    {
+        int tt;
+        cin>>tt;
 
-    matrix A = T.POWW(n - 1);
+        dd[tt]++;
+    }
 
-    matrix B;
-    B.val[1][1] = 2;
-    B.val[2][1] = 1;
-    B.val[3][1] = 1;
+    matrix a;
+    a.val[1][1] = 1;
 
-    matrix C = A * B;
+    for(int i = 2;i<=101;i++)
+        a.val[1][i] = a.val[2][i] = dd[i - 1];
 
-    cout<<C.val[1][1];
+    for(int i = 3;i<=101;i++)
+        a.val[i][i - 1] = 1;
+
+    a = a.POWW(k);
+
+    matrix b;
+
+    b.val[1][1] = b.val[2][1] = 1;
+
+    matrix c = a * b;
+
+    cout<<c.val[1][1];
+
     return 0;
 }

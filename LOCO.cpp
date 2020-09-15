@@ -10,15 +10,16 @@
 #define F first
 #define S second
 #define maxn 4
-#define MOD 1000000007
 #define remain(x) if (x > MOD) x -= MOD
 #define pii pair<int, int>
-#define Task "fibos"
+#define Task "loco"
 
 using namespace std;
 
 typedef long long ll;
 typedef long double ld;
+
+int MOD;
 
 struct matrix{
     int val[maxn][maxn];
@@ -49,32 +50,38 @@ struct matrix{
 
 int main()
 {
-    ios_base::sync_with_stdio(0); cin.tie(); cout.tie();
+	ios_base::sync_with_stdio(0); cin.tie(); cout.tie();
     freopen(Task".inp", "r", stdin);
     freopen(Task".out", "w", stdout);
 
     ll n;
-    cin >> n;
+    cin >> n >> MOD;
 
-    if(n == 1) return cout<<1, 0;
+    if(n == 0)
+    {
+        cout<<0;
+        return 0;
+    }
+    else
+        if(n == 1)
+    {
+        cout<<1 % MOD;
+        return 0;
+    }
 
     matrix T;
-    T.val[1][1] = 1;
-    T.val[1][2] = 1;
-    T.val[1][3] = 1;
-    T.val[2][2] = 1;
-    T.val[2][3] = 1;
-    T.val[3][2] = 1;
+    T.val[1][1] = T.val[1][2] = T.val[1][3] = 1;
+    T.val[2][1] = T.val[3][2] = 1;
 
     matrix A = T.POWW(n - 1);
 
     matrix B;
-    B.val[1][1] = 2;
+    B.val[1][1] = 1;
     B.val[2][1] = 1;
-    B.val[3][1] = 1;
 
-    matrix C = A * B;
+    matrix C =  A*B;
 
     cout<<C.val[1][1];
+
     return 0;
 }
