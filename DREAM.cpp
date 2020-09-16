@@ -1,4 +1,6 @@
-#include <bits/stdc++.h>
+#include <iostream>
+#include <stdio.h>
+#include <cstring>
 #define sz(x) int(x.size())
 #define reset(x) memset(x, 0,sizeof(x))
 #define Rep(i,n) for(int (i)=0;(i)<(int)(n);++(i))
@@ -13,7 +15,7 @@
 #define MOD 1000000007
 #define remain(x) if (x > MOD) x -= MOD
 #define pii pair<int, int>
-#define Task "dream"
+#define Task "debug"
 
 using namespace std;
 
@@ -23,17 +25,21 @@ typedef long double ld;
 
 struct matrix{
     int val[maxn][maxn];
+    int height , width;
+
     matrix (){
         memset(val, 0, sizeof(val));
     }
     matrix operator * (const matrix &B){
         matrix C;
-        for (int i = 1; i <= 101; i++)
-            for (int j = 1; j <= 101; j++)
+        for (int i = 1; i <= height; i++)
+            for (int j = 1; j <= B.width; j++)
             {
-                for (int k = 1; k <= 101; k++)
+                for (int k = 1; k <= B.height; k++)
                     C.val[i][j] = (C.val[i][j] + (ll)val[i][k] * B.val[k][j]) % MOD;
             }
+        C.height = height;
+        C.width = width;
         return C;
     }
 
@@ -55,7 +61,7 @@ int dd[110], n;
 int main()
 {
     ios_base::sync_with_stdio(0);
-    cin.tie(0); cout.tie();
+    cin.tie(0); cout.tie(0);
 
     freopen(Task".inp", "r", stdin);
     freopen(Task".out", "w", stdout);
@@ -64,15 +70,19 @@ int main()
 
     cin>> n >> k;
 
+    int tt;
+
     for(int i = 1;i<=n;i++)
     {
-        int tt;
-        cin>>tt;
+        cin>> tt;
 
         dd[tt]++;
     }
 
     matrix a;
+
+    a.height = 101;
+    a.width = 101;
     a.val[1][1] = 1;
 
     for(int i = 2;i<=101;i++)
@@ -84,7 +94,8 @@ int main()
     a = a.POWW(k);
 
     matrix b;
-
+    b.height = 101;
+    b.width = 1;
     b.val[1][1] = b.val[2][1] = 1;
 
     matrix c = a * b;
