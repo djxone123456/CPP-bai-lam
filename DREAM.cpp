@@ -12,7 +12,6 @@
 #define F first
 #define S second
 #define maxn 110
-#define MOD 1000000007
 #define remain(x) if (x > MOD) x -= MOD
 #define pii pair<int, int>
 #define Task "debug"
@@ -22,6 +21,7 @@ using namespace std;
 typedef long long ll;
 typedef unsigned long long ull;
 typedef long double ld;
+const ll MOD = 1e9 + 7;
 
 struct matrix{
     int val[maxn][maxn];
@@ -41,10 +41,10 @@ struct matrix{
                 ll tmp = 0;
                 for (int k = 1; k <= B.height; k++)
                 {
-                    tmp += (ll)val[i][k] * B.val[k][j]);
+                    tmp += (ll)val[i][k] * B.val[k][j];
                     while(tmp > MOD2) tmp -= MOD2;
                 }
-                C[i][j] = tmp % MOD;
+                C.val[i][j] = tmp % MOD;
             }
         C.height = height;
         C.width = B.width;
