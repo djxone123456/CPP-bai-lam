@@ -30,7 +30,9 @@ struct matrix{
     matrix (){
         memset(val, 0, sizeof(val));
     }
-    matrix operator * (const matrix &B){
+
+    matrix operator * (const matrix &B)
+    {
         matrix C;
         for (int i = 1; i <= height; i++)
             for (int j = 1; j <= B.width; j++)
@@ -39,11 +41,12 @@ struct matrix{
                     C.val[i][j] = (C.val[i][j] + (ll)val[i][k] * B.val[k][j]) % MOD;
             }
         C.height = height;
-        C.width = width;
+        C.width = B.width;
         return C;
     }
 
-    matrix POWW(ull x){
+    matrix POWW(ull x)
+    {
         if(x == 1) return (*this);
         if(x == 2) return (*this) * (*this);
 
@@ -86,7 +89,7 @@ int main()
     a.val[1][1] = 1;
 
     for(int i = 2;i<=101;i++)
-        a.val[1][i] = a.val[2][i] = dd[i - 1];
+        a.val[1][i] = dd[i - 1], a.val[2][i] = dd[i - 1];
 
     for(int i = 3;i<=101;i++)
         a.val[i][i - 1] = 1;
