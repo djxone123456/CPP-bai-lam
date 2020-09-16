@@ -33,12 +33,18 @@ struct matrix{
 
     matrix operator * (const matrix &B)
     {
+        ll MOD2 = MOD * MOD;
         matrix C;
         for (int i = 1; i <= height; i++)
             for (int j = 1; j <= B.width; j++)
             {
+                ll tmp = 0;
                 for (int k = 1; k <= B.height; k++)
-                    C.val[i][j] = (C.val[i][j] + (ll)val[i][k] * B.val[k][j]) % MOD;
+                {
+                    tmp += (ll)val[i][k] * B.val[k][j]);
+                    while(tmp > MOD2) tmp -= MOD2;
+                }
+                C[i][j] = tmp % MOD;
             }
         C.height = height;
         C.width = B.width;
