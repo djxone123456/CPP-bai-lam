@@ -12,21 +12,47 @@ typedef pair <int, int> pi;
 typedef long long ll;
 typedef unsigned long long ull;
 
-int n, m;
-set<string> tim, a;
+int n,m, cnt = 0, isEnd[200004] = {};
+int child[200004][40] = {};
+
+void add(string s)
+{
+    int node = 0;
+
+    for(int i = 0; i < s.size(); i++)
+    {
+        int x = (int)s[i] - '0';
+
+        if(child[node][x] == 0) child[node][x] = ++cnt;
+        node = child[node][x];
+    }
+
+    isEnd[node] = 1;
+}
+
+int found(string s)
+{
+    int node = 0;
+
+    for(int i = 0; i < s.size(); i++)
+    {
+        int x = (int)s[i] - '0';
+
+        if(child[node][x] == 0) return 0;
+        node = child[node][x];
+    }
+    return isEnd[node];
+}
 
 int main()
 {
     ios_base::sync_with_stdio(0);
     cin.tie(0); cout.tie(0);
 
-//    #ifdef djxone123456
-//    freopen("debug.inp","r",stdin);
-//    freopen("debug.out","w",stdout);
-//    #endif
-
-    freopen("foundstr.inp","r",stdin);
-    freopen("foundstr.out", "w",stdout);
+    #ifdef djxone123456
+    freopen("debug.inp","r",stdin);
+    freopen("debug.out","w",stdout);
+    #endif
 
     cin>>n;
 
@@ -35,36 +61,20 @@ int main()
         string s;
         cin>>s;
 
-        a.insert(s);
+        add(s);
     }
 
-    cin>>m;
+    int m;
 
-    for(int i = 1;i<=m;i++)
+    cin >> m;
+
+    for(int i = 1; i <= m; i++)
     {
         string s;
-        cin>>s;
+        cin >> s;
 
-        if(a.find(s) != a.end()) cout<<1<<endl;
-        else cout<<0<<endl;
+        cout << found(s) << endl;
     }
 
     return 0;
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
