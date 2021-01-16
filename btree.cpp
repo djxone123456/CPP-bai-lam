@@ -188,12 +188,12 @@ int main()
     if(fopen("debug.inp", "r"))
     {
         freopen("debug.inp", "r", stdin);
-        freopen("debug.ans", "w", stdout);
+        freopen("debug.out", "w", stdout);
     }
     else
     {
         freopen(ten".inp", "r", stdin);
-        freopen(ten".ans", "w", stdout);
+        freopen(ten".out", "w", stdout);
     }
 
     int t;
